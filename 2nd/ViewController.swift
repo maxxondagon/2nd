@@ -33,7 +33,7 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             firstButton.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 10),
             firstButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
+            
             secondButton.topAnchor.constraint(equalTo: firstButton.bottomAnchor, constant: 10),
             secondButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
@@ -57,7 +57,16 @@ class ViewController: UIViewController {
                                                               bottom: 10,
                                                               trailing: 14)
         button.configuration = configuration
-        button.startAnimatingPressActions()
+        var animation: UIViewPropertyAnimator!
+            button.configurationUpdateHandler = { button in
+                if animation?.isRunning != nil {
+                    animation.stopAnimation(true)
+                }
+                animation = UIViewPropertyAnimator(duration: 0.2, curve: .easeOut) {
+                    button.transform = button.isHighlighted ? CGAffineTransform(scaleX: 0.92, y: 0.92) : .identity
+                }
+                animation.startAnimation()
+            }
         return button
     }
     
@@ -70,4 +79,3 @@ class ViewController: UIViewController {
         present(viewController, animated: true)
     }
 }
-
